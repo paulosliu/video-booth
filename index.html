@@ -1,16 +1,66 @@
 <html>
 
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./styles.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-        crossorigin="anonymous"></script>
-    <script src="./index.js"></script>
-</head>
-
 <body>
-    <div class="container">
+    <style>
+        .video-booth #player-wrapper {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: black;
+        }
+
+        .video-booth #player-overlay {
+            height: 500px;
+            line-height: 500px;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            color: white;
+            font-size: 20em;
+            text-align: center;
+        }
+
+        .video-booth #player {
+            height: 500px;
+        }
+
+        .video-booth #buttons {
+            margin: 0.5em;
+        }
+
+        .video-booth #stop {
+            display: none;
+        }
+
+        .video-booth form>div {
+            display: table-row;
+        }
+
+        .video-booth form {
+            display: table;
+        }
+
+        .video-booth label,
+        .video-booth input {
+            display: table-cell;
+            margin: 5px;
+        }
+    </style>
+    <div class="container video-booth">
+        <div id="player-wrapper">
+            <video id="player"></video>
+            <div id="player-overlay"></div>
+        </div>
+        <div id="buttons">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+        </div>
         <form>
             <div>
                 <label for="fname">First Name:</label>
@@ -25,13 +75,127 @@
                 <input type="text" name="sname" id="sname" required />
             </div>
         </form>
-        <video id="player"></video>
-        <div id="buttons">
-            <button id="start">Start</button>
-            <button id="stop">Stop</button>
-            <a href="#" id="download">Download and Submit</a>
-        </div>
     </div>
+
+    <script>
+        (function () {
+            const API_ENDPOINT = "https://l0642dodf0.execute-api.us-east-1.amazonaws.com/default/getPresignedURL";
+
+            document.addEventListener("DOMContentLoaded", SetupVideoRecording);
+
+            function SetupVideoRecording() {
+                const RECORD_INTERVAL = 500;
+
+                let shouldStop = false;
+                let stopped = false;
+                const downloadLink = document.getElementById("download");
+                const startButton = document.getElementById("start");
+                const stopButton = document.getElementById("stop");
+                const player = document.getElementById("player");
+
+                stopButton.addEventListener("click", function () {
+                    shouldStop = true;
+                });
+
+                var handleSuccess = function (stream) {
+                    player.srcObject = stream;
+                    player.muted = true;
+                    player.play();
+
+                    const options = { mimeType: "video/webm" };
+                    const recordedChunks = [];
+                    const mediaRecorder = new MediaRecorder(stream, options);
+
+                    startButton.addEventListener("click", () => {
+                        ShowVideoCountdown(() => {
+                            mediaRecorder.start(RECORD_INTERVAL);
+                        });
+                        document.getElementById("start").style.display = "none";
+                        document.getElementById("stop").style.display = "block";
+                    });
+
+                    mediaRecorder.addEventListener("dataavailable", e => {
+
+                        if (e.data.size > 0)
+                            recordedChunks.push(e.data);
+
+                        if (shouldStop === true && stopped === false) {
+                            mediaRecorder.stop();
+                            stopped = true;
+                        }
+                    });
+
+                    mediaRecorder.addEventListener("stop", () => {
+                        let fileName = GetUserFileName();
+
+                        Upload(new Blob(recordedChunks), fileName);
+                    });
+                };
+
+                navigator.mediaDevices
+                    .getUserMedia({ audio: true, video: true })
+                    .then(handleSuccess);
+            }
+
+            function ShowVideoCountdown(callback) {
+                let secondsLeft = 5;
+                let overlay = document.getElementById("player-overlay");
+                overlay.style.display = "block";
+                overlay.textContent = secondsLeft;
+
+                decrementTime();
+
+                function decrementTime() {
+                    setTimeout(() => {
+                        secondsLeft--;
+                        if (secondsLeft < 0) {
+                            overlay.style.display = "none";
+                            callback();
+                        } else {
+                            decrementTime();
+                        }
+
+                        overlay.textContent = secondsLeft;
+                    }, 1000)
+                }
+            }
+
+            function GetUserFileName() {
+                let fName = document.getElementById("fname").value;
+                let lName = document.getElementById("lname").value;
+                let year = document.getElementById("year").value;
+                let sName = document.getElementById("sname").value;
+
+                return fName + lName + "_" + year + "_" + sName;
+            }
+
+            async function Upload(file, name) {
+                try {
+                    var response = await fetch(API_ENDPOINT + "?name=" + name);
+                    var data = await response.json();
+
+                    UploadToUrl(data.uploadURL, file);
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
+            async function UploadToUrl(url, file) {
+                try {
+                    fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'video/webm'
+                        },
+                        mode: 'cors',
+                        body: file
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        })();
+    </script>
 </body>
 
 </html>
