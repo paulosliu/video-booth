@@ -1,0 +1,95 @@
+
+.video-booth {
+    height: auto;
+    width: 100%;
+    display: flex;
+    background-color: #f1f1f1f1;
+    position: relative;
+
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.button-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.video-booth-page {
+    padding: 2em;
+    display: none;
+}
+
+.input-row {
+    display: flex;
+}
+
+.input-row label,
+.input-row .mdc-select {
+    margin: 1em;
+    width: 50%;
+}
+
+.input-row .mdc-select {
+    padding-top: .5em;
+}
+
+.input-row .mdc-select {
+    margin: .5em 1em 1em 1em;
+    width: 50%;
+}
+
+label.mdc-text-field {
+    margin: 1em;
+}
+
+.video-booth #input-container {
+    padding: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+    border: 1px grey solid;
+}
+
+.video-booth #player-wrapper {
+    margin: 1em;
+    height: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: black;
+}
+
+.video-booth #player-overlay {
+    height: 500px;
+    line-height: 500px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    color: white;
+    font-size: 20em;
+    text-align: center;
+}
+
+.video-booth #stop:enabled {
+    background-color: red;
+}
+
+.video-booth #player {
+    height: 500px;
+}
+
+.video-booth #buttons {
+    margin: 0.5em;
+}
+
+.video-booth form>div {
+    display: table-row;
+}
+
+.video-booth form {
+    display: table;
+}
