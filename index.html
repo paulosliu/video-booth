@@ -1,9 +1,64 @@
 <html>
 
+<head>
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+</head>
+
 <body>
     <style>
-        .video-booth #player-wrapper {
+        .video-booth {
+            height: auto;
             width: 100%;
+            display: flex;
+            background-color: #f1f1f1f1;
+            position: relative;
+
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .button-container {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        .video-booth-page {
+            padding: 2em;
+            display: none;
+        }
+
+        .input-row {
+            display: flex;
+        }
+
+        .input-row label,
+        .input-row .mdc-select {
+            margin: 1em;
+            width: 50%;
+        }
+
+        .input-row .mdc-select {
+            padding-top: .5em;
+        }
+
+        .input-row .mdc-select {
+            margin: .5em 1em 1em 1em;
+            width: 50%;
+        }
+
+        label.mdc-text-field {
+            margin: 1em;
+        }
+
+        .video-booth #input-container {
+            padding: 1em;
+            margin-left: 1em;
+            margin-right: 1em;
+            border: 1px grey solid;
+        }
+
+        .video-booth #player-wrapper {
+            margin: 1em;
             height: 500px;
             position: relative;
             display: flex;
@@ -26,16 +81,16 @@
             text-align: center;
         }
 
+        .video-booth #stop:enabled {
+            background-color: red;
+        }
+
         .video-booth #player {
             height: 500px;
         }
 
         .video-booth #buttons {
             margin: 0.5em;
-        }
-
-        .video-booth #stop {
-            display: none;
         }
 
         .video-booth form>div {
@@ -45,157 +100,375 @@
         .video-booth form {
             display: table;
         }
-
-        .video-booth label,
-        .video-booth input {
-            display: table-cell;
-            margin: 5px;
-        }
     </style>
-    <div class="container video-booth">
-        <div id="player-wrapper">
-            <video id="player"></video>
-            <div id="player-overlay"></div>
-        </div>
-        <div id="buttons">
-            <button id="start">Start</button>
-            <button id="stop">Stop</button>
-        </div>
-        <form>
-            <div>
-                <label for="fname">First Name:</label>
-                <input type="text" name="fname" id="fname" required />
-                <label>Last Name:</label>
-                <input type="text" name="lname" id="lname" required />
+    <div class="video-booth mdc-card">
+        <div class="video-booth-page" id="vb-page-1">
+            <h2>Which prompt do you want to respond to?</h2>
+            <div class="mdc-card">
+                <ul class="mdc-list">
+                    <li class="mdc-list-item" tabindex="0">
+                        <span class="mdc-list-item__ripple"></span>
+                        <span class="mdc-list-item__text">Prompt 1</span>
+                    </li>
+                    <li class="mdc-list-item" tabindex="0">
+                        <span class="mdc-list-item__ripple"></span>
+                        <span class="mdc-list-item__text">Prompt 2</span>
+                    </li>
+                    <li class="mdc-list-item" tabindex="0">
+                        <span class="mdc-list-item__ripple"></span>
+                        <span class="mdc-list-item__text">Prompt 3</span>
+                    </li>
+                </ul>
             </div>
-            <div>
-                <label>School Year:</label>
-                <input type="text" name="year" id="year" required />
-                <label>School Name:</label>
-                <input type="text" name="sname" id="sname" required />
+        </div>
+
+        <div class="video-booth-page" id="vb-page-2">
+            <h2>Your Info</h2>
+            <div class="mdc-card">
+                <div class="input-row">
+                    <label class="mdc-text-field mdc-text-field--outlined" id="fname-field">
+                        <input type="text" id="fname" class="mdc-text-field__input" aria-labelledby="fname-input-label">
+                        <span class="mdc-notched-outline">
+                            <span class="mdc-notched-outline__leading"></span>
+                            <span class="mdc-notched-outline__notch">
+                                <span class="mdc-floating-label" id="fname-input-label">First Name</span>
+                            </span>
+                            <span class="mdc-notched-outline__trailing"></span>
+                        </span>
+                    </label>
+
+                    <label class="mdc-text-field mdc-text-field--outlined" id="lname-field">
+                        <input type="text" id="lname" class="mdc-text-field__input" aria-labelledby="lname-input-label">
+                        <span class="mdc-notched-outline">
+                            <span class="mdc-notched-outline__leading"></span>
+                            <span class="mdc-notched-outline__notch">
+                                <span class="mdc-floating-label" id="lname-input-label">Last Name</span>
+                            </span>
+                            <span class="mdc-notched-outline__trailing"></span>
+                        </span>
+                    </label>
+                </div>
+                <div class="input-row">
+
+                    <div class="mdc-select mdc-select--outlined">
+                        <div class="mdc-select__anchor">
+                            <span class="mdc-select__selected-text" id="sname"></span>
+                            <span class="mdc-select__dropdown-icon">
+                                <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                                    <polygon class="mdc-select__dropdown-icon-inactive" stroke="none"
+                                        fill-rule="evenodd" points="7 10 12 15 17 10">
+                                    </polygon>
+                                    <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd"
+                                        points="7 15 12 10 17 15">
+                                    </polygon>
+                                </svg>
+                            </span>
+                            <span class="mdc-floating-label">School Name</span>
+                            <span class="mdc-line-ripple"></span>
+                        </div>
+
+                        <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+                            <ul class="mdc-list" id="vb-school-list">
+                                <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true">
+                                    <span class="mdc-list-item__ripple"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mdc-select mdc-select--outlined">
+                        <div class="mdc-select__anchor">
+                            <span class="mdc-select__selected-text" id="year"></span>
+                            <span class="mdc-select__dropdown-icon">
+                                <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                                    <polygon class="mdc-select__dropdown-icon-inactive" stroke="none"
+                                        fill-rule="evenodd" points="7 10 12 15 17 10">
+                                    </polygon>
+                                    <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd"
+                                        points="7 15 12 10 17 15">
+                                    </polygon>
+                                </svg>
+                            </span>
+                            <span class="mdc-floating-label">School Year</span>
+                            <span class="mdc-line-ripple"></span>
+                        </div>
+
+                        <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+                            <ul class="mdc-list">
+                                <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true">
+                                    <span class="mdc-list-item__ripple"></span>
+                                </li>
+                                <li class="mdc-list-item" data-value="Freshman">
+                                    <span class="mdc-list-item__ripple"></span>
+                                    <span class="mdc-list-item__text">Freshman</span>
+                                </li>
+                                <li class="mdc-list-item" data-value="Sophomore">
+                                    <span class="mdc-list-item__ripple"></span>
+                                    <span class="mdc-list-item__text">Sophomore</span>
+                                </li>
+                                <li class="mdc-list-item" data-value="Junior">
+                                    <span class="mdc-list-item__ripple"></span>
+                                    <span class="mdc-list-item__text">Junior</span>
+                                </li>
+                                <li class="mdc-list-item" data-value="Senior">
+                                    <span class="mdc-list-item__ripple"></span>
+                                    <span class="mdc-list-item__text">Senior</span>
+                                </li>
+                                <li class="mdc-list-item" data-value="Other">
+                                    <span class="mdc-list-item__ripple"></span>
+                                    <span class="mdc-list-item__text">Other</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button class="mdc-button" vbnav="vb-page-1">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Back</span>
+                    </button>
+                    <button class="mdc-button mdc-button--outlined" vbnav="vb-page-4">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Upload</span>
+                    </button>
+                    <button class="mdc-button mdc-button--unelevated" vbnav="vb-page-3">
+                        <span class="mdc-button__label">Record</span>
+                    </button>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
 
-    <script>
-        (function () {
-            const API_ENDPOINT = "https://l0642dodf0.execute-api.us-east-1.amazonaws.com/default/getPresignedURL";
+        <div class="video-booth-page" id="vb-page-3">
+            <h2>Record!</h2>
+            <div class="mdc-card">
+                <div id="player-wrapper">
+                    <video id="player"></video>
+                    <div id="player-overlay"></div>
+                </div>
+                <div class="button-container">
+                    <button class="mdc-button" id="vb-3-back" vbnav="vb-page-2">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Back</span>
+                    </button>
+                    <button class="mdc-button mdc-button--unelevated" id="start">
+                        <div class="mdc-button__ripple"></div>
+                        <span class="mdc-button__label">Record</span>
+                    </button>
+                    <button class="mdc-button mdc-button--unelevated" id="stop" disabled>
+                        <span class="mdc-button__label">Stop</span>
+                    </button>
+                    <button class="mdc-button mdc-button--unelevated" id="submit" disabled>
+                        <span class="mdc-button__label">Submit</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-            document.addEventListener("DOMContentLoaded", SetupVideoRecording);
+        <!--Style scripts-->
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script>
+            (function () {
+                const SELECT_FIELDS = []
 
-            function SetupVideoRecording() {
-                const RECORD_INTERVAL = 500;
+                for (el of document.querySelectorAll('.mdc-text-field'))
+                    new mdc.textField.MDCTextField(el);
 
-                let shouldStop = false;
-                let stopped = false;
-                const downloadLink = document.getElementById("download");
-                const startButton = document.getElementById("start");
-                const stopButton = document.getElementById("stop");
-                const player = document.getElementById("player");
+                for (el of document.querySelectorAll('.mdc-select')) {
+                    new mdc.select.MDCSelect(el);
+                }
 
-                stopButton.addEventListener("click", function () {
-                    shouldStop = true;
-                });
+            })();
+        </script>
 
-                var handleSuccess = function (stream) {
-                    player.srcObject = stream;
-                    player.muted = true;
-                    player.play();
+        <script>
+            (function () {
+                const COLLEGES = ["Albany College of Pharmacy and Health Sciences", "Amarillo College", "American University (AU)", "Arizona State University", "Ateneo de Manila University", "Augusta University ", "Azusa Pacific University (APU)", "Berkeley Community College (BCC)", "Biola University", "Brown University", "Cal Baptist University", "Cal Poly Pomona (CPP)", "Cal Poly SLO", "Caltech", "Carnegie Mellon University (CMU)", "Case Western Reserve University ", "Century High School", "Chaffey College", "Chapman University", "Citrus College", "City College of San Francisco (CCSF)", "Claflin University ", "Claremont Colleges", "Clark University", "Clemson", "College of the Canyons", "Columbia International University ", "Concordia Irvine", "Cornell University", "Crafton Hills College", "CSU", "CSU East Bay", "CSU Fresno", "CSU Fullerton", "CSU Long Beach", "CSU Los Angeles", "CSU Monterey Bay", "CSU Northridge", "CSU Sacramento", "CSU San Bernardino", "CSU Stanislaus", "Daley", "Dallas College ", "Dartmouth", "De Anza College", "Drexel University", "Duke University", "El Camino College", "Emory", "Evergreen Valley College", "Florida State University", "Folsom Lake College", "Fordham University", "Gavilan community college", "George Fox University", "George Mason University (GMU)", "Golden West College", "Grand Canyon University", "Harvard University", "Hong Kong University", "Houston Community College", "Indiana University", "Iowa State University", "Johns Hopkins University", "Kansas City University of Medicine & Biosciences", "Laney Community College", "Leesville Road High School", "Life Pacific University", "Loma Linda University", "Loyola Marymount University (LMU)", "Loyola University Chicago", "Maryville College ", "Middlebury College", "Midwestern University", "Milwaukee Area Technical College", "Minneapolis College of Art and Design", "MIT", "Moreno Valley College", "N/A", "NC State University", "New York University", "Northern Virginia Community College", "Northwestern", "Oakland University", "Ohio State University", "Ohlone College", "One Body Church", "Oral Roberts University", "Pace University", "Penn State University", "Pepperdine University", "Point Loma Narazene University", "Prairie College", "Prince George’s Community College", "Princeton", "Purdue", "Rice University", "Rider University", "Rip Hondo College", "Riverside City College", "Rutgers", "San Diego Mesa College ", "San Diego Mesa Community College", "San Jose State University (SJSU)", "Santa Clara University", "Santa Monica College", "Savannah college of Art and Design ", "School of Visual Arts", "Seattle Pacific University", "Seattle University", "SF State University (SFSU)", "Shasta College", "Simon Fraser University", "Skyline College", "Spring Arbor University", "St. Charles Community College ", "St. Edward’s University  ", "St. Louis Community College", "Stanly Community College", "Swarthmore", "Tata Institute of Social Sciences, Mumbai, India", "Texas A&M", "Texas State, San Marcos", "Towson University", "Tsinghua University", "Tufts University", "Tulane University", "UC Berkeley", "UC Davis", "UC Irvine (UCI)", "UC Merced", "UC Riverside (UCR)", "UC San Diego (UCSD)", "UC Santa Barbara (UCSB)", "UC Santa Cruz (UCSC)", "UCLA", "UMD Baltimore County", "UMD College Park", "UNC Chapel Hill", "United States Air Force Academy ", "United States Naval School", "Unites States Military Academy at West Point", "University of British Columbia", "University of Campinas", "University of Chicago", "University of Hawai'i at Manoa", "University of Houston", "University of Minnesota", "University of North Georgia", "University of Pennsylvania (UPenn)", "University of Pittsburgh", "University of San Francisco (USF)", "University of the Pacific (UoP)", "University of Utah", "University of Virginia", "University of Washington (UW)", "University of Wisconsin Madison", "Universty of Illinois Urbana-Champaign", "Unnamed Community College", "USC", "UT Austin", "UT Dallas", "UT Tyler", "Victor Valley College", "Virginia tech ", "Wake Tech", "Wellesley College", "Western Washington University", "Westmont", "Wheaton", "William Jessup University", "Other"];
+                const API_ENDPOINT = "https://l0642dodf0.execute-api.us-east-1.amazonaws.com/default/getPresignedURL";
+                document.addEventListener("DOMContentLoaded", OnLoad);
 
-                    const options = { mimeType: "video/webm" };
-                    const recordedChunks = [];
-                    const mediaRecorder = new MediaRecorder(stream, options);
+                function OnLoad() {
+                    ShowPage($("button").first(), "vb-page-1");
+                    SetupPrompts();
+                    SetupButtons();
+                    SetupCollegesSelector();
+                    SetupVideoRecording();
+                }
 
-                    startButton.addEventListener("click", () => {
-                        ShowVideoCountdown(() => {
-                            mediaRecorder.start(RECORD_INTERVAL);
+                function SetupPrompts() {
+                    $("#vb-page-1 .mdc-list-item").on('click', (e) => {
+                        $(".mdc-list-item").removeClass("selected")
+                        $(e.target).addClass('selected');
+                        ShowPage($(e.target), "vb-page-2");
+                    });
+                }
+
+                function SetupCollegesSelector() {
+                    let $schoolList = $("#vb-school-list");
+                    for (college of COLLEGES) {
+                        $schoolList.append($(`<li class="mdc-list-item" data-value="${college}">
+                            <span class="mdc-list-item__ripple"></span>
+                            <span class="mdc-list-item__text">${college}</span>
+                        </li>`));
+                    }
+                }
+
+                function SetupButtons() {
+                    $(".mdc-button").on('click', (e) => {
+                        let $target = $(e.target).closest('button');
+                        let pageId = $target.attr('vbnav');
+
+                        if (pageId === "vb-page-3" || pageId === "vb-page-4") {
+                            let fileName = GetUserFileName();
+                            if (!fileName) {
+                                alert("Please fill out form completely");
+                                return;
+                            }
+                        }
+
+                        if (pageId) {
+                            ShowPage($target, pageId);
+                        }
+                    })
+                }
+
+                function ShowPage($el, pageId) {
+                    $el.closest('.video-booth-page').fadeOut(150, () => {
+                        $("#" + pageId).fadeIn(150);
+                    });
+                }
+
+                function SetupVideoRecording() {
+                    const RECORD_INTERVAL = 500;
+
+                    let shouldStop, stopped;
+                    const downloadLink = document.getElementById("download");
+                    const startButton = document.getElementById("start");
+                    const stopButton = document.getElementById("stop");
+                    const player = document.getElementById("player");
+
+                    stopButton.addEventListener("click", function () {
+                        shouldStop = true;
+                    });
+
+                    var handleSuccess = function (stream) {
+                        player.srcObject = stream;
+                        player.muted = true;
+                        player.play();
+
+                        const options = { mimeType: "video/webm" };
+                        let mediaRecorder = new MediaRecorder(stream, options);
+                        let recordedChunks
+
+                        startButton.addEventListener("click", () => {
+                            ShowVideoCountdown(() => {
+                                mediaRecorder.start(RECORD_INTERVAL);
+                                $("#stop").prop('disabled', false);
+                            });
+                            $("#start").prop('disabled', true);
+                            $("#vb-3-back").prop('disabled', true);
+                            $("#submit").prop('disabled', true);
+
+                            shouldStop = stopped = false;
+                            recordedChunks = [];
                         });
-                        document.getElementById("start").style.display = "none";
-                        document.getElementById("stop").style.display = "block";
-                    });
 
-                    mediaRecorder.addEventListener("dataavailable", e => {
+                        $("#submit").on('click', () => {
+                            let fileName = GetUserFileName();
+                            console.log(fileName);
+                            Upload(new Blob(recordedChunks), fileName);
+                        })
 
-                        if (e.data.size > 0)
-                            recordedChunks.push(e.data);
+                        mediaRecorder.addEventListener("dataavailable", e => {
 
-                        if (shouldStop === true && stopped === false) {
-                            mediaRecorder.stop();
-                            stopped = true;
-                        }
-                    });
+                            if (e.data.size > 0)
+                                recordedChunks.push(e.data);
 
-                    mediaRecorder.addEventListener("stop", () => {
-                        let fileName = GetUserFileName();
+                            if (shouldStop === true && stopped === false) {
+                                mediaRecorder.stop();
+                                stopped = true;
 
-                        Upload(new Blob(recordedChunks), fileName);
-                    });
-                };
+                                $("#start").prop('disabled', false);
+                                $("#stop").prop('disabled', true);
+                                $("#vb-3-back").prop('disabled', false);
+                                $("#submit").prop('disabled', false);
+                            }
+                        });
 
-                navigator.mediaDevices
-                    .getUserMedia({ audio: true, video: true })
-                    .then(handleSuccess);
-            }
+                        mediaRecorder.addEventListener("stop", () => {
+                        });
+                    };
 
-            function ShowVideoCountdown(callback) {
-                let secondsLeft = 5;
-                let overlay = document.getElementById("player-overlay");
-                overlay.style.display = "block";
-                overlay.textContent = secondsLeft;
-
-                decrementTime();
-
-                function decrementTime() {
-                    setTimeout(() => {
-                        secondsLeft--;
-                        if (secondsLeft < 0) {
-                            overlay.style.display = "none";
-                            callback();
-                        } else {
-                            decrementTime();
-                        }
-
-                        overlay.textContent = secondsLeft;
-                    }, 1000)
+                    navigator.mediaDevices
+                        .getUserMedia({ audio: true, video: true })
+                        .then(handleSuccess);
                 }
-            }
 
-            function GetUserFileName() {
-                let fName = document.getElementById("fname").value;
-                let lName = document.getElementById("lname").value;
-                let year = document.getElementById("year").value;
-                let sName = document.getElementById("sname").value;
+                function ShowVideoCountdown(callback) {
+                    let secondsLeft = 5;
+                    let overlay = document.getElementById("player-overlay");
+                    overlay.style.display = "block";
+                    overlay.textContent = secondsLeft;
 
-                return fName + lName + "_" + year + "_" + sName;
-            }
+                    decrementTime();
 
-            async function Upload(file, name) {
-                try {
-                    var response = await fetch(API_ENDPOINT + "?name=" + name);
-                    var data = await response.json();
+                    function decrementTime() {
+                        setTimeout(() => {
+                            secondsLeft--;
+                            if (secondsLeft < 0) {
+                                overlay.style.display = "none";
+                                callback();
+                            } else {
+                                decrementTime();
+                            }
 
-                    UploadToUrl(data.uploadURL, file);
-                } catch (e) {
-                    console.error(e);
+                            overlay.textContent = secondsLeft;
+                        }, 1000)
+                    }
                 }
-            }
 
-            async function UploadToUrl(url, file) {
-                try {
-                    fetch(url, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'video/webm'
-                        },
-                        mode: 'cors',
-                        body: file
-                    });
-                } catch (e) {
-                    console.error(e);
+                function GetUserFileName() {
+                    let prompt = $("#vb-page-1 .mdc-list-item.selected").text().trim();
+
+                    let fName = $("#fname").val();
+                    let lName = $("#lname").val();
+                    let year = $("#year").text();
+                    let sName = $("#sname").text();
+
+                    if (!fName || !lName || !year || !sName)
+                        return null;
+
+                    return prompt + "/" + sName + "/" + year + "/" + fName + lName;
                 }
-            }
-        })();
-    </script>
+
+                async function Upload(file, name) {
+                    try {
+                        var response = await fetch(API_ENDPOINT + "?name=" + name);
+                        var data = await response.json();
+
+                        UploadToUrl(data.uploadURL, file);
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+
+                async function UploadToUrl(url, file) {
+                    try {
+                        fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'video/webm'
+                            },
+                            mode: 'cors',
+                            body: file
+                        });
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+            })();
+        </script>
 </body>
 
 </html>
