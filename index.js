@@ -95,7 +95,51 @@
             if (pageId) {
                 ShowPage($target, pageId);
             }
-        })
+        });
+
+        const $vb2DefButtons = $(".button-container.vb-3-buttons");
+        const $uploadContainer = $("#upload-container");
+        $("#open-upload-button").on("click", () => {
+            $vb2DefButtons.fadeOut(150, () => {
+                $uploadContainer.fadeIn(150);
+            });
+        });
+
+        $("#upload-container .cancel-button").on("click", () => {
+            $uploadContainer.fadeOut(150, () => {
+                $vb2DefButtons.fadeIn(150);
+            });
+        });
+
+        const $fileChooser = $("#upload-file-chooser");
+        const $uploadButton = $("#upload-button");
+        $("#choose-file-button").on("click", () => {
+            $fileChooser.click();
+        });
+
+        $fileChooser.on('change', () => {
+            if(!$fileChooser.val())
+                return;
+
+            let text = $fileChooser.val().split("\\").pop(); // get the file name
+            $("#choose-file-name").text(text)
+            $uploadButton.prop("disabled", false);
+        });
+
+        $uploadButton.on('click', () => {
+            let file = $fileChooser[0].files[0];
+
+            if(!file) {
+                console.error('Something went wrong: file is not there.');
+                return;
+            }
+
+            Upload(file, file.type, GetExtension(file.name));
+
+            function GetExtension(filename) {
+                return filename.split('.').pop();
+            }
+        });
     }
 
     function ShowPage($el, pageId) {
@@ -149,10 +193,8 @@
                 recordedChunks = [];
             });
 
-            $("#submit").on('click', (e) => {
-                let fileName = GetUserFileName();
-                ShowPage($(e.target), "vb-page-3");
-                Upload(new Blob(recordedChunks), fileName);
+            $("#submit").on('click', () => {
+                Upload(new Blob(recordedChunks));
             })
 
             mediaRecorder.addEventListener("dataavailable", e => {
@@ -222,26 +264,35 @@
         return $el.text().trim();
     }
 
-    async function Upload(file, name) {
+    async function Upload(blob, contentType, extension) {
+        const name = GetUserFileName();
+
+        const contentParam = contentType ? "?ctype=" + encodeURIComponent(contentType) : "";
+        const extensionParam = contentType && extension ? "?ext=" + encodeURIComponent(extension) : "";
+        const nameParam = "?name=" + encodeURIComponent(name);
+
         try {
-            var response = await fetch(API_ENDPOINT + "?name=" + name);
+            var response = await fetch(API_ENDPOINT + nameParam + contentParam + extensionParam);
             var data = await response.json();
 
-            UploadToUrl(data.uploadURL, file);
+            UploadToUrl(data.uploadURL, blob, contentType);
         } catch (e) {
             console.error(e);
         }
     }
 
-    async function UploadToUrl(url, file) {
+    async function UploadToUrl(url, blob, contentType) {
+        if(typeof contentType === "undefined")
+            contentType = "video/webm";
+
         try {
             await fetch(url, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'video/webm'
+                    'Content-Type': contentType
                 },
                 mode: 'cors',
-                body: file
+                body: blob
             });
 
             OnUploaded();

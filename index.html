@@ -12,14 +12,13 @@
     <div class="video-booth mdc-card">
         <h2>Rise Student Sharing</h2>
         <div class="video-booth-page" id="vb-page-1">
-            <div id="browser-warning">Your browser does not support recording video. You can either just upload your video sharing or switch to Chrome or Firefox.</div>
+            <div id="browser-warning">Your browser does not support recording video. Please try Chrome or Firefox or simply upload your video sharing.</div>
             <div class="mdc-card">
                 <h3>Which prompt are you responding to?</h3>
                 <ul id="prompts" class="mdc-list"></ul>
             </div>
-
             <div class="mdc-card">
-                <h3>Your Info</h3>
+                <h3>Info</h3>
                 <div class="input-row">
                     <label class="mdc-text-field mdc-text-field--outlined" id="fname-field">
                         <input type="text" id="fname" class="mdc-text-field__input" aria-labelledby="fname-input-label">
@@ -44,7 +43,6 @@
                     </label>
                 </div>
                 <div class="input-row">
-
                     <div class="mdc-select mdc-select--outlined">
                         <div class="mdc-select__anchor">
                             <span class="mdc-select__selected-text" id="sname"></span>
@@ -117,14 +115,35 @@
                     </div>
                 </div>
 
-                <div class="button-container">
-                    <button class="mdc-button mdc-button--outlined" vbnav="vb-page-3">
+                <div class="button-container vb-3-buttons">
+                    <button class="mdc-button mdc-button--outlined" id="open-upload-button">
                         <div class="mdc-button__ripple"></div>
                         <span class="mdc-button__label">Upload</span>
                     </button>
                     <button class="mdc-button mdc-button--unelevated" id="record-page-button" vbnav="vb-page-2">
                         <span class="mdc-button__label">Record</span>
                     </button>
+                </div>
+                <div id="upload-container" style="display: none">
+                    <div class="button-container">
+                        <div id="choose-file-group">
+                            <button class="mdc-button mdc-button--outlined" id="choose-file-button">
+                                <span class="mdc-button__label">Choose File</span>
+                            </button>
+                            <span id="choose-file-name">filename</span>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button class="mdc-button cancel-button">
+                            <div class="mdc-button__ripple"></div>
+                            <span class="mdc-button__label">Cancel</span>
+                        </button>
+                        <button class="mdc-button mdc-button--unelevated" id="upload-button" vbnav="vb-page-3" disabled>
+                            <div class="mdc-button__ripple"></div>
+                            <span class="mdc-button__label">Upload</span>
+                        </button>
+                    </div>
+                    <input type="file" id="upload-file-chooser" name="upload-file-chooser">
                 </div>
             </div>
         </div>
@@ -147,7 +166,7 @@
                     <button class="mdc-button mdc-button--unelevated" id="stop" disabled>
                         <span class="mdc-button__label">Stop</span>
                     </button>
-                    <button class="mdc-button mdc-button--unelevated" id="submit" disabled>
+                    <button class="mdc-button mdc-button--unelevated" id="submit" vbnav="vb-page-3" disabled>
                         <span class="mdc-button__label">Submit</span>
                     </button>
                 </div>
@@ -157,18 +176,19 @@
             <div class="mdc-card">
                 <h2 class="vb-progress-text" id="vb-progress-title">Uploading...</h2>
                 <p id="vb-progress-done-p"><a href="/video-sharing">Click here</a> to submit another sharing.</p>
-                <div role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">
+                <div role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate"
+                    aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">
                     <div class="mdc-linear-progress__buffer">
-                      <div class="mdc-linear-progress__buffer-bar"></div>
-                      <div class="mdc-linear-progress__buffer-dots"></div>
+                        <div class="mdc-linear-progress__buffer-bar"></div>
+                        <div class="mdc-linear-progress__buffer-dots"></div>
                     </div>
                     <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
-                      <span class="mdc-linear-progress__bar-inner"></span>
+                        <span class="mdc-linear-progress__bar-inner"></span>
                     </div>
                     <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
-                      <span class="mdc-linear-progress__bar-inner"></span>
+                        <span class="mdc-linear-progress__bar-inner"></span>
                     </div>
-                  </div>
+                </div>
             </div>
         </div>
 
