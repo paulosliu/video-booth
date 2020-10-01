@@ -10,29 +10,15 @@
 
 <body>
     <div class="video-booth mdc-card">
+        <h2>Rise Student Sharing</h2>
         <div class="video-booth-page" id="vb-page-1">
-            <h2>Which prompt do you want to respond to?</h2>
             <div class="mdc-card">
-                <ul class="mdc-list">
-                    <li class="mdc-list-item" tabindex="0">
-                        <span class="mdc-list-item__ripple"></span>
-                        <span class="mdc-list-item__text">Prompt 1</span>
-                    </li>
-                    <li class="mdc-list-item" tabindex="0">
-                        <span class="mdc-list-item__ripple"></span>
-                        <span class="mdc-list-item__text">Prompt 2</span>
-                    </li>
-                    <li class="mdc-list-item" tabindex="0">
-                        <span class="mdc-list-item__ripple"></span>
-                        <span class="mdc-list-item__text">Prompt 3</span>
-                    </li>
-                </ul>
+                <h3>Which prompt are you responding to?</h3>
+                <ul id="prompts" class="mdc-list"></ul>
             </div>
-        </div>
 
-        <div class="video-booth-page" id="vb-page-2">
-            <h2>Your Info</h2>
             <div class="mdc-card">
+                <h3>Your Info</h3>
                 <div class="input-row">
                     <label class="mdc-text-field mdc-text-field--outlined" id="fname-field">
                         <input type="text" id="fname" class="mdc-text-field__input" aria-labelledby="fname-input-label">
@@ -131,30 +117,25 @@
                 </div>
 
                 <div class="button-container">
-                    <button class="mdc-button" vbnav="vb-page-1">
-                        <div class="mdc-button__ripple"></div>
-                        <span class="mdc-button__label">Back</span>
-                    </button>
-                    <button class="mdc-button mdc-button--outlined" vbnav="vb-page-4">
+                    <button class="mdc-button mdc-button--outlined" vbnav="vb-page-3">
                         <div class="mdc-button__ripple"></div>
                         <span class="mdc-button__label">Upload</span>
                     </button>
-                    <button class="mdc-button mdc-button--unelevated" vbnav="vb-page-3">
+                    <button class="mdc-button mdc-button--unelevated" vbnav="vb-page-2">
                         <span class="mdc-button__label">Record</span>
                     </button>
                 </div>
             </div>
         </div>
-
-        <div class="video-booth-page" id="vb-page-3">
-            <h2>Record!</h2>
+        <div class="video-booth-page" id="vb-page-2" style="display: none">
             <div class="mdc-card">
+                <h3 id="record-prompt-title"></h3>
                 <div id="player-wrapper">
                     <video id="player"></video>
                     <div id="player-overlay"></div>
                 </div>
                 <div class="button-container">
-                    <button class="mdc-button" id="vb-3-back" vbnav="vb-page-2">
+                    <button class="mdc-button" vbnav="vb-page-1">
                         <div class="mdc-button__ripple"></div>
                         <span class="mdc-button__label">Back</span>
                     </button>
@@ -172,7 +153,6 @@
             </div>
         </div>
 
-        <!--Style scripts-->
         <script src="mdc_helper.js"></script>
         <script src="index.js"></script>
 </body>
