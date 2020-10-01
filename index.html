@@ -12,6 +12,7 @@
     <div class="video-booth mdc-card">
         <h2>Rise Student Sharing</h2>
         <div class="video-booth-page" id="vb-page-1">
+            <div id="browser-warning">Your browser does not support recording video. You can either just upload your video sharing or switch to Chrome or Firefox.</div>
             <div class="mdc-card">
                 <h3>Which prompt are you responding to?</h3>
                 <ul id="prompts" class="mdc-list"></ul>
@@ -121,7 +122,7 @@
                         <div class="mdc-button__ripple"></div>
                         <span class="mdc-button__label">Upload</span>
                     </button>
-                    <button class="mdc-button mdc-button--unelevated" vbnav="vb-page-2">
+                    <button class="mdc-button mdc-button--unelevated" id="record-page-button" vbnav="vb-page-2">
                         <span class="mdc-button__label">Record</span>
                     </button>
                 </div>
@@ -135,7 +136,7 @@
                     <div id="player-overlay"></div>
                 </div>
                 <div class="button-container">
-                    <button class="mdc-button" vbnav="vb-page-1">
+                    <button class="mdc-button" id="vb-2-back" vbnav="vb-page-1">
                         <div class="mdc-button__ripple"></div>
                         <span class="mdc-button__label">Back</span>
                     </button>
@@ -152,8 +153,25 @@
                 </div>
             </div>
         </div>
+        <div class="video-booth-page" id="vb-page-3" style="display: none">
+            <div class="mdc-card">
+                <h2 class="vb-progress-text" id="vb-progress-title">Uploading...</h2>
+                <p id="vb-progress-done-p"><a href="/video-sharing">Click here</a> to submit another sharing.</p>
+                <div role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0">
+                    <div class="mdc-linear-progress__buffer">
+                      <div class="mdc-linear-progress__buffer-bar"></div>
+                      <div class="mdc-linear-progress__buffer-dots"></div>
+                    </div>
+                    <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+                      <span class="mdc-linear-progress__bar-inner"></span>
+                    </div>
+                    <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+                      <span class="mdc-linear-progress__bar-inner"></span>
+                    </div>
+                  </div>
+            </div>
+        </div>
 
-        <script src="mdc_helper.js"></script>
         <script src="index.js"></script>
 </body>
 
