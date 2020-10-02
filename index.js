@@ -87,7 +87,7 @@
             if (pageId === "vb-page-2" || pageId === "vb-page-3") {
                 let fileName = GetUserFileName();
                 if (!fileName) {
-                    alert("Please fill out form completely");
+                    alert("Please select a prompt and fill out form completely");
                     return;
                 }
             }
@@ -252,7 +252,7 @@
         let year = $("#year").text();
         let sName = $("#sname").text();
 
-        if (!fName || !lName || !year || !sName)
+        if (!prompt || !fName || !lName || !year || !sName)
             return null;
 
         return prompt + "/" + sName + "/" + year + "/" + fName + lName;
